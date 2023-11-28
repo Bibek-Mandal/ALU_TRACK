@@ -1,7 +1,53 @@
 const mongoose = require('mongoose');
 
+const categorySchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const subCategorySchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
+    category: {
+      categorySchema,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const productSchema = new mongoose.Schema(
   {
+    vendor: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Vendor',
+    },
     title: {
       type: String,
       required: true,
@@ -22,12 +68,10 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     category: {
-      type: String,
-      required: true,
+      categorySchema,
     },
     subcategory: {
-      type: String,
-      required: true,
+      subCategorySchema,
     },
     brand: {
       type: String,
